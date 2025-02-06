@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 client = Client()
 
-@app.route('')
+@app.route('/')
 def main():
     return "Reach API Docs - https://github.com/arcaaane/reach-ai/ \nAI Messaging - https://flask-reach.vercel.app/chat?message=YOUR_MESSAGE"
 
