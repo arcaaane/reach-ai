@@ -65,14 +65,28 @@
             chatBox.innerHTML += `<div><strong>You:</strong> ${message}</div>`;
             inputField.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
-            
-            try {
-                const response = await fetch(`https://flask-reach.vercel.app/chat?message=${encodeURIComponent(message)}`);
-                const data = await response.json();
-                chatBox.innerHTML += `<div><strong>Bot:</strong> ${data.response}</div>`;
-                chatBox.scrollTop = chatBox.scrollHeight;
-            } catch (error) {
-                chatBox.innerHTML += `<div><strong>Bot:</strong> Error fetching response.</div>`;
+
+            let retries = 3;  // Number of retries
+            let success = false;
+
+            while (retries > 0 && !success) {
+                try {
+                    const response = await fetch(`https://flask-reach.vercel.app/chat?message=${encodeURIComponent(message)}`);
+                    if (!response.ok) throw new Error("Response not OK");
+                    const data = await response.json();
+                    chatBox.innerHTML += `<div><strong>Bot:</strong> ${data.response}</div>`;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                    success = true;
+                } catch (error) {
+                    retries--;
+                    if (retries > 0) {
+                        chatBox.innerHTML += `<div><strong>Bot:</strong> Error fetching response. Retrying... (${3 - retries})</div>`;
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                    } else {
+                        chatBox.innerHTML += `<div><strong>Bot:</strong> Error fetching response after multiple attempts.</div>`;
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                    }
+                }
             }
         }
     </script>
