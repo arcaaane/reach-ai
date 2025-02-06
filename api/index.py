@@ -1,8 +1,9 @@
 from flask import Flask, request, jsonify
 from g4f.client import Client
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+CORS(app)
 client = Client()
 
 @app.route('/')
