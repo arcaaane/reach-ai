@@ -19,6 +19,5 @@ def chat():
         messages=[{"role": "user", "content": user_message}],
         web_search=False
     )
-    response.headers.add("Access-Control-Allow-Origin", "*")
     return jsonify({"response": response.choices[0].message.content})
     
